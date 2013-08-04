@@ -1,0 +1,1 @@
+require File.expand_path('../../lib/otis.rb', __FILE__)
