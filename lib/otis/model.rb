@@ -1,6 +1,7 @@
 module Otis
   class Model
+    include Object
     include Virtus
-    include HashRoot
+    include HashContent
   end
 end
