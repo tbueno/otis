@@ -2,8 +2,8 @@ require 'faraday'
 
 module Otis
   class HttpClient < Client
-    def initialize(routes, url)
-      @routes = routes
+    def initialize(map, url)
+      @routes = map.routes
       @client = create_client(url)
     end
 

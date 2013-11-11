@@ -1,7 +1,7 @@
 module Otis
   class SoapClient < Client
-    def initialize(routes, wsdl)
-      @routes = routes
+    def initialize(map, wsdl)
+      @routes = map.routes
       @client = Savon.client(wsdl: wsdl)
     end
 

@@ -6,13 +6,11 @@ describe Otis::HttpClient do
   end
   class ResponseClass; def initialize(string); end; end
 
-  #TODO: pass the map object instead of the routes hash
   let(:map) do
     Otis::Map.new({
       :op1 => ResponseClass,
       :op2 => double
-
-    }).routes
+    })
   end
 
   describe 'operations' do
@@ -50,22 +48,23 @@ describe Otis::HttpClient do
   describe 'call' do
     let(:faraday)   { double(get: response) }
     let(:response) { {my_call: 'response'}}
+    let(:routes) { Otis::Map.new({my_call: ResponseClass}) }
 
     before { Otis::HttpClient.any_instance.stub(create_client: faraday)}
 
     it 'forwards the call to the client' do
       faraday.should_receive(:get).with("api/v1/my_call", {param1: 'foo', param2: 'bar'})
-      MyHttpClient.new({my_call: ResponseClass}, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+      MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
     end
 
     it 'returns response object' do
-      MyHttpClient.new({my_call: ResponseClass}, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+      MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
         .should be_a(ResponseClass)
     end
 
     it 'passes the attributes to response object' do
       ResponseClass.should_receive(:new).with(response)
-      MyHttpClient.new({my_call: ResponseClass}, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+      MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
     end
   end
 
