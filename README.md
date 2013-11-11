@@ -25,7 +25,7 @@ It all starts by describing the webservice/API that you would be interacting to 
 Using the example of [link to unzip example], this first step would be like this:
 
     Otis::Map.new({
- 	    :get_info_by_zip => UsZip::InfoZipResponse,
+      :get_info_by_zip => UsZip::InfoZipResponse,
       :get_info_by_state => UsZip::InfoStateResponse,
       :get_info_by_city => UsZip::InfoCityResponse,
       :get_info_by_area_code => UsZip::InfoAreaCodeResponse
