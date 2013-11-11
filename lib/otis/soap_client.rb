@@ -1,5 +1,5 @@
 module Otis
-  class SoapClient
+  class SoapClient < Client
     def initialize(routes, wsdl)
       @routes = routes
       @client = Savon.client(wsdl: wsdl)
@@ -12,13 +12,7 @@ module Otis
     protected
     def call(action, options)
       soap_response = @client.call(action, options.first).body
-      soap_response["#{action}_response".to_sym]
-    end
-
-    def method_missing(meth, *args)
-      klass = @routes[meth.to_sym]
-      super unless klass
-      klass.new(call(meth, args))
+      soap_response
     end
   end
 end

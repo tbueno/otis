@@ -1,7 +1,7 @@
 require 'faraday'
 
 module Otis
-  class HttpClient
+  class HttpClient < Client
     def initialize(routes, url)
       @routes = routes
       @client = create_client(url)
@@ -25,12 +25,6 @@ module Otis
         faraday.response :logger
         faraday.adapter Faraday.default_adapter
       end
-    end
-
-    def method_missing(meth, *args)
-      klass = @routes[meth.to_sym]
-      super unless klass
-      klass.new(call(meth, args))
     end
   end
 end

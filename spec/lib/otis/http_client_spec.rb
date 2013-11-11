@@ -48,7 +48,7 @@ describe Otis::HttpClient do
   end
 
   describe 'call' do
-    let(:faraday)   { double }
+    let(:faraday)   { double(get: response) }
     let(:response) { {my_call: 'response'}}
 
     before { Otis::HttpClient.any_instance.stub(create_client: faraday)}
@@ -57,20 +57,16 @@ describe Otis::HttpClient do
       faraday.should_receive(:get).with("api/v1/my_call", {param1: 'foo', param2: 'bar'})
       MyHttpClient.new({my_call: ResponseClass}, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
     end
+
+    it 'returns response object' do
+      MyHttpClient.new({my_call: ResponseClass}, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+        .should be_a(ResponseClass)
+    end
+
+    it 'passes the attributes to response object' do
+      ResponseClass.should_receive(:new).with(response)
+      MyHttpClient.new({my_call: ResponseClass}, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+    end
   end
 
-  # describe 'call' do
-  #   let(:client)   { stub('soap client')}
-  #   let(:response) { {my_call: 'response'}}
-
-  #   before do
-  #     client.stub_chain(:call, :body).and_return(response)
-  #     Savon.stub(client: client)
-  #   end
-
-  #   it 'delegates the call the the client' do
-  #     client.should_receive(:call).with(:my_call, {params: []})
-  #     MyClient.new({my_call: ResponseClass}, mock).my_call(params: [])
-  #   end
-  # end
 end
