@@ -1,7 +1,7 @@
 module Otis
   class Model
-    include Object
-    include Virtus
+    include Otis::Object
+    include Virtus.model
     include HashContent
   end
 end
