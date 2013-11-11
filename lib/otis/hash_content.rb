@@ -1,4 +1,6 @@
 module Otis
+  # This module holds a collection of utilitie methods for Hash objects
+  #
   module HashContent
     def self.included(base)
       base.extend(ClassExtension)
@@ -12,7 +14,7 @@ module Otis
     private
     def root(attrs)
       return attrs unless self.respond_to?(:path)
-      attrs = hashify(attrs)
+      attrs = sub_tree(attrs)
       if self.respond_to?(:new_root)
         Hash[new_root.to_sym => attrs]
       else
@@ -20,7 +22,8 @@ module Otis
       end
     end
 
-    def hashify(attrs)
+    # Navigates in the Hash tree and return a subtree based on the path list
+    def sub_tree(attrs)
       path.inject(attrs){ |res, el| res[el]}
     end
 

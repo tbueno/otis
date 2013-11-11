@@ -13,10 +13,7 @@ module Otis
 
     protected
     def call(action, options)
-      # response = @
-      resp = @client.get "#{options.first}/#{action}", options.last #{access_token: token, fn: 'Berlin'}
-      # soap_response = @client.call(action, options).body
-      # soap_response["#{action}_response".to_sym]
+      @client.get "#{options.first}/#{action}", options.last
     end
 
     def create_client(url)

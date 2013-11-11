@@ -21,16 +21,16 @@ describe Otis::SoapClient do
 
     it 'delegates the call the the client' do
       client.should_receive(:call).with(:my_call, {params: []})
-      MySoapClient.new({my_call: ResponseClass}, mock).my_call(params: [])
+      MySoapClient.new({my_call: ResponseClass}, double).my_call(params: [])
     end
 
     it 'returns response object' do
-      MySoapClient.new({my_call: ResponseClass}, mock).my_call(params: []).should be_a(ResponseClass)
+      MySoapClient.new({my_call: ResponseClass}, double).my_call(params: []).should be_a(ResponseClass)
     end
 
     it 'passes the attributes to response object' do
       ResponseClass.should_receive(:new).with(response)
-      MySoapClient.new({my_call: ResponseClass}, mock).my_call(params: [])
+      MySoapClient.new({my_call: ResponseClass}, double).my_call(params: [])
     end
   end
 end
