@@ -1,6 +1,7 @@
 require "otis/version"
 require "virtus"
 require "savon"
+require 'json'
 module Otis
   require 'otis/hash_content'
   require 'otis/otis_object'

@@ -13,7 +13,8 @@ module Otis
 
     protected
     def call(action, options)
-      @client.get "#{options.first}/#{action}", options.last
+      response = @client.get "#{options.first}/#{action}", options.last
+      JSON.parse(response.body)
     end
 
     def create_client(url)

@@ -46,8 +46,9 @@ describe Otis::HttpClient do
   end
 
   describe 'call' do
+
     let(:faraday)   { double(get: response) }
-    let(:response) { {my_call: 'response'}}
+    let(:response) { double(body: "{\"my_call\": \"response\"}")}
     let(:routes) { Otis::Map.new({my_call: ResponseClass}) }
 
     before { Otis::HttpClient.any_instance.stub(create_client: faraday)}
@@ -62,8 +63,8 @@ describe Otis::HttpClient do
         .should be_a(ResponseClass)
     end
 
-    it 'passes the attributes to response object' do
-      ResponseClass.should_receive(:new).with(response)
+    it 'passes the parsed response to response object' do
+      ResponseClass.should_receive(:new).with({'my_call' => 'response'})
       MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
     end
   end
