@@ -24,27 +24,6 @@ module Otis
           class_eval %(attr_accessor :#{m} )
         end
       end
-
-      def collection(opts ={})
-        collection = opts[:as].to_s
-        klass = opts[:of]
-        class_eval %(def #{collection}; @#{collection} ||= Array(@response['#{camelize(collection)}']).map{|c| #{klass}.new(c)}; end)
-      end
-
-      def decamelize_attributes!
-        class_eval %(def decamelize?; true; end)
-      end
-
-      def initialize_hooks(*meths)
-        class_eval %(def hooks; #{meths}; end)
-      end
-
-      private
-      def camelize(string)
-        return string if string !~ /_/ && self =~ /[A-Z]+.*/
-        string.split('_').map{|e| e.capitalize}.join
-      end
-
     end
 
     private
