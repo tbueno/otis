@@ -22,7 +22,7 @@ Or install it yourself as:
 
 It all starts by describing the webservice/API that you would be interacting to by creating Otis::Map of entry points and response objects.
 
-Using the example of [link to unzip example], this first step would be like this:
+Using the example of [US Zip webservice](https://github.com/tbueno/otis_uszip_example), this first step would be like this:
 
     Otis::Map.new({
       :get_info_by_zip => UsZip::InfoZipResponse,
