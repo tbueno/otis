@@ -9,7 +9,7 @@ describe Otis::SoapClient do
   let(:client)   { double(operations: [:op1, :op2])}
   let(:routes) { Otis::Map.new({my_call: ResponseClass}) }
 
-  before { Savon.stub(client: client) }
+  before { Savon::Client.stub(new: client) }
 
   describe 'operations' do
     it 'maps the allowed from client' do
@@ -20,10 +20,10 @@ describe Otis::SoapClient do
   describe 'call' do
     let(:response) { {my_call: 'response'}}
 
-    before { client.stub_chain(:call, :body).and_return(response) }
+    before { client.stub_chain(:request, :body).and_return(response) }
 
     it 'delegates the call the the client' do
-      client.should_receive(:call).with(:my_call, {params: []})
+      client.should_receive(:request).with(:req, :my_call)
       MySoapClient.new(routes, double).my_call(params: [])
     end
 
