@@ -19,7 +19,7 @@ module Otis
 
     #TODO: make it more robust
     def respond(response)
-      response.status == 304 ? {} : JSON.parse(response.body)
+      response.status == 304 ? {} : JSON.parse(response.body).merge(headers: response.headers)
     end
 
     def create_client(url)
