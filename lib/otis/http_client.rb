@@ -12,9 +12,14 @@ module Otis
     end
 
     protected
-    def call(action, options)
-      response = @client.get "#{options.first}/#{action}", options.last
-      JSON.parse(response.body)
+    def call(action, url, options)
+      response = @client.get "#{url}", options, {'Content-Type' => 'application/json'}
+      respond(response)
+    end
+
+    #TODO: make it more robust
+    def respond(response)
+      response.status == 304 ? {} : JSON.parse(response.body)
     end
 
     def create_client(url)

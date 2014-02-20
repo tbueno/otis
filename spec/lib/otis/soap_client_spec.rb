@@ -23,7 +23,7 @@ describe Otis::SoapClient do
     before { client.stub_chain(:call, :body).and_return(response) }
 
     it 'delegates the call the the client' do
-      client.should_receive(:call).with(:my_call, {params: []})
+      client.should_receive(:call).with(:my_call, [:params, []])
       MySoapClient.new(routes, double).my_call(params: [])
     end
 

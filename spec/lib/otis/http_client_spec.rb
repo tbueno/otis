@@ -23,7 +23,7 @@ describe Otis::HttpClient do
     let(:url) { 'http://api.site.com' }
 
     it 'instantiate a faraday client with endpoint url' do
-      Faraday.should_receive(:new).with(url: url)
+      expect(Faraday).to receive(:new).with(url: url)
       described_class.new(map, url)
     end
 
@@ -47,25 +47,27 @@ describe Otis::HttpClient do
 
   describe 'call' do
 
-    let(:faraday)   { double(get: response) }
-    let(:response) { double(body: "{\"my_call\": \"response\"}")}
-    let(:routes) { Otis::Map.new({my_call: ResponseClass}) }
+    let(:faraday)  { double(get: response)                                  }
+    let(:url)      { 'api/v1'                                               }
+    let(:params)   {                         { param1: 'foo', param2: 'bar' }                 }
+    let(:response) { double(body: "          { \"my_call\": \"response\"    } ", status: 200) }
+    let(:routes)   { Otis::Map.new(          { my_call: ResponseClass       } )               }
 
     before { Otis::HttpClient.any_instance.stub(create_client: faraday)}
 
     it 'forwards the call to the client' do
-      faraday.should_receive(:get).with("api/v1/my_call", {param1: 'foo', param2: 'bar'})
-      MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+      expect(faraday).to receive(:get).with(url, params, {'Content-Type' => 'application/json'})
+      MyHttpClient.new(routes, 'url').my_call(url, params)
     end
 
     it 'returns response object' do
-      MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
-        .should be_a(ResponseClass)
+      expect(MyHttpClient.new(routes, 'url').my_call(url, params))
+        .to be_a(ResponseClass)
     end
 
     it 'passes the parsed response to response object' do
       ResponseClass.should_receive(:new).with({'my_call' => 'response'})
-      MyHttpClient.new(routes, 'url').my_call('api/v1', {param1: 'foo', param2: 'bar'})
+      MyHttpClient.new(routes, 'url').my_call(url, params)
     end
   end
 

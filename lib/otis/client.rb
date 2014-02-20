@@ -6,7 +6,7 @@ module Otis
     def method_missing(meth, *args)
       klass = @routes[meth.to_sym]
       super unless klass
-      klass.new(call(meth, args))
+      klass.new(call(meth, *args))
     end
   end
 end

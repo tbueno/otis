@@ -32,9 +32,11 @@ Using the example of [US Zip webservice](https://github.com/tbueno/otis_uszip_ex
     })
 
 ### Client
-Otis offers a base Client class that handle the response and instantiates the response object accordingly.
+Otis offers a base Client class that handle the response and instantiates the response object accordingly. In the following example, a SOAP client is instantiated with the proper WSDL
 
     Otis::Client.new(routes, "http://www.webservicex.net/uszip.asmx?WSDL")
+
+HTTP clients can also be used as well
 
 ### Model
 
