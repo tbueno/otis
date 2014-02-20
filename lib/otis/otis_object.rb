@@ -10,11 +10,6 @@ module Otis
       attrs.each_pair do |k, v|
         m = underscore(k.to_s)
         self.send("#{m}=", v ) if self.respond_to?("#{m}=")
-      end if respond_to?(:decamelize?) and decamelize?
-      if respond_to?(:hooks)
-        hooks.each do |hook|
-          self.send(hook)
-        end
       end
     end
 
@@ -24,6 +19,19 @@ module Otis
           class_eval %(attr_accessor :#{m} )
         end
       end
+
+      def collection(opts ={})
+        collection = opts[:as].to_s
+        klass = opts[:of]
+        class_eval %(def #{collection}; @#{collection} ||= Array(@response['#{camelize(collection)}']).map{|c| #{klass}.new(c)}; end)
+      end
+
+      private
+      def camelize(string)
+        return string if string !~ /_/ && self =~ /[A-Z]+.*/
+        string.split('_').map{|e| e.capitalize}.join
+      end
+
     end
 
     private
