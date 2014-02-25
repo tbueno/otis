@@ -24,7 +24,6 @@ describe Otis::Object do
 
     describe 'tag attributes' do
       class TestAttributeClass < Otis::Model
-        include Otis::Object
         tag_attributes :foo, :bar
       end
 

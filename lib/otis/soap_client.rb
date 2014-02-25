@@ -11,7 +11,7 @@ module Otis
 
     protected
     def call(action, options)
-      soap_response = @client.call(action, options.first).body
+      soap_response = @client.call(action, options).body
       soap_response
     end
   end
