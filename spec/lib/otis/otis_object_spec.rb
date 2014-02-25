@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Otis::Object do
 
   describe 'collection' do
-    class Thing; end
+    class Thing < Otis::Model
+      attribute :a
+    end
 
     class TestClass
       include Otis::Object
@@ -22,18 +24,25 @@ describe Otis::Object do
       expect(klass.things.count).to eq(2)
     end
 
-    describe 'tag attributes' do
-      class TestAttributeClass < Otis::Model
-        tag_attributes :foo, :bar
-      end
+    it 'transforms correctly the collection' do
+      klass = TestClass.new(:things => [{a: 'foo'},  {b: 'bar'}])
+      expect(klass.things.count).to eq(2)
+      expect(klass.things.first.a).to eq('foo')
+    end
+  end
 
-      describe 'dinamic method creation' do
-        it 'reads from the hash removing @' do
-          t = TestAttributeClass.new(:@foo => 'f', :@bar => 'b')
-          t.foo.should == 'f'
-          t.bar.should == 'b'
-        end
+  describe 'tag attributes' do
+    class TestAttributeClass < Otis::Model
+      tag_attributes :foo, :bar
+    end
+
+    describe 'dinamic method creation' do
+      it 'reads from the hash removing @' do
+        t = TestAttributeClass.new(:@foo => 'f', :@bar => 'b')
+        t.foo.should == 'f'
+        t.bar.should == 'b'
       end
     end
   end
+
 end

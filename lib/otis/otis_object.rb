@@ -20,10 +20,15 @@ module Otis
         end
       end
 
+      #
+      # This method allows a dynamic generation a list of node in a parent one.
+      # It differs slightly from Virtus mapping in a way that it guarantess that
+      # a return of a collection is always an array and never a nil object
+      #
       def collection(opts ={})
         collection = opts[:as].to_s
         klass = opts[:of]
-        class_eval %(def #{collection}; @#{collection} ||= Array(@response['#{camelize(collection)}']).map{|c| #{klass}.new(c)}; end)
+        class_eval %(def #{collection}; @#{collection} ||= Array(@response[:#{collection}]).map{|c| #{klass}.new(c)}; end)
       end
 
       #
