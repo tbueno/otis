@@ -26,6 +26,38 @@ module Otis
         class_eval %(def #{collection}; @#{collection} ||= Array(@response['#{camelize(collection)}']).map{|c| #{klass}.new(c)}; end)
       end
 
+      #
+      # When Savon receives a response with attributes in its tags, it creates
+      # keys that start with '@' sign, which breaks in the Virtus object
+      # transformation.
+      # This method allows the mapping of an attribute that would be originally
+      # ignored by Virtus. See the example below:
+      #
+      # <response duration="123">
+      #    <tag>Foo</tag>
+      # </response>
+      #
+      # In order to create the right mapper, the following needs to be done:
+      #
+      # class YourObject < Otis::Model
+      #   tag_attribute :duration
+      #   attribute :tag
+      # end
+      #
+      # yourObject.tag       # => "Foo"
+      # yourObject.duration  #=> 123
+      #
+      #
+      def tag_attributes(*args)
+        args.each do |m|
+          class_eval %(
+            def #{m}
+              @response[:@#{m}]
+            end
+          )
+        end
+      end
+
       private
       def camelize(string)
         return string if string !~ /_/ && self =~ /[A-Z]+.*/
