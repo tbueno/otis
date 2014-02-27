@@ -5,9 +5,9 @@ module Otis
       base.extend(ClassExtension)
     end
 
-    def initialize(attrs = {})
-      @response = attrs
-      attrs.each_pair do |k, v|
+    def initialize(attributes = nil)
+      @response = attributes || {}
+      @response.each_pair do |k, v|
         m = underscore(k.to_s)
         self.send("#{m}=", v ) if self.respond_to?("#{m}=")
       end
@@ -28,7 +28,7 @@ module Otis
       def collection(opts ={})
         collection = opts[:as].to_s
         klass = opts[:of]
-        class_eval %(def #{collection}; @#{collection} ||= Array(@response[:#{collection}]).map{|c| #{klass}.new(c)}; end)
+        class_eval %( def #{collection}; @#{collection} ||= [@response[:#{collection}]].compact.flatten.map{|c| #{klass}.new(c)}; end )
       end
 
       #

@@ -19,6 +19,7 @@ describe Otis::Object do
     end
 
     it 'holds a collection' do
+      klass = TestClass.new
       klass.things << Thing.new
       klass.things << Thing.new
       expect(klass.things.count).to eq(2)
@@ -29,6 +30,15 @@ describe Otis::Object do
       expect(klass.things.count).to eq(2)
       expect(klass.things.first.a).to eq('foo')
     end
+
+    context 'when element is no a collection' do
+      subject {TestClass.new(:things => {a: 'foo'}).things}
+      it 'makes a new collection containing the element' do
+        expect(subject.count).to eq(1)
+        expect(subject.first.a).to eq('foo')
+      end
+    end
+
   end
 
   describe 'tag attributes' do
