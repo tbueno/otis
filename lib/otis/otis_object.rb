@@ -5,8 +5,9 @@ module Otis
       base.extend(ClassExtension)
     end
 
-    def initialize(attributes = nil)
-      @response = attributes || {}
+    def initialize(attributes = {})
+      raise UnexpectedContentError.new("Array received when a hash was expected by class #{self.class}: \n#{@response}") if attributes.is_a?(Array)
+      @response = attributes
       @response.each_pair do |k, v|
         m = underscore(k.to_s)
         self.send("#{m}=", v ) if self.respond_to?("#{m}=")
