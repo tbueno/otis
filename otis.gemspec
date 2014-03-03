@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "debugger"
   spec.add_development_dependency "rspec"
 
-  spec.add_dependency 'savon', '~> 2.2.0'
+  spec.add_dependency 'savon', '~> 2.3'
   spec.add_dependency 'faraday'
   spec.add_dependency 'virtus'
 end
