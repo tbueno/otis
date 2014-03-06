@@ -36,4 +36,22 @@ describe Otis::SoapClient do
       MySoapClient.new(routes, double).my_call(params: [])
     end
   end
+
+  describe 'options' do
+    context 'with options passed in' do
+      let(:params) { {my_option: 'foo'} }
+      it 'uses the received options' do
+        expect(Savon).to receive(:client).with(wsdl: 'wsdl', my_option: 'foo')
+        Otis::SoapClient.new(routes, 'wsdl', params)
+      end
+    end
+
+    context 'with options passed in' do
+      it 'uses the received options' do
+        expect(Savon).to receive(:client).with(wsdl: 'wsdl', log: false)
+        Otis::SoapClient.new(routes, 'wsdl')
+      end
+    end
+  end
+
 end

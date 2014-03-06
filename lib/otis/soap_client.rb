@@ -1,8 +1,11 @@
 module Otis
   class SoapClient < Client
-    def initialize(map, wsdl)
+    DEFAULT_OPTIONS = {log: false}
+
+    def initialize(map, wsdl, options = DEFAULT_OPTIONS)
       @routes = map.routes
-      @client = Savon.client(wsdl: wsdl)
+      options.merge!(wsdl: wsdl)
+      @client = Savon.client(options)
     end
 
     def operations
